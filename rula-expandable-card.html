@@ -1,0 +1,244 @@
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="bower_components/paper-styles/shadow.html">
+
+<dom-module id="rula-expandable-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      #wrapper {
+        @apply --shadow-elevation-2dp;
+        padding-top: 70%;
+        position: relative;
+        width: 100%;
+      }
+
+      #header {
+        align-items: flex-end;
+        background-color: #002d72;
+        border-radius: 2px;
+        bottom: 0;
+        box-sizing: border-box;
+        color: #ffffff;
+        cursor: pointer;
+        display: flex;
+        font-size: 24px;
+        height: 100%;
+        justify-content: flex-start;
+        left: 0;
+        padding: 16px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 100%;
+        @apply --rula-expandable-card-header;
+      }
+
+      #scrim {
+        background-color: rgba(0,0,0,0.4);
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        transform: translateZ(0);
+        transition-duration: 200ms;
+        transition-property: opacity;
+        z-index: 999;
+      }
+
+      #scrim[hidden] {
+        visibility: hidden;
+      }
+
+      #scrim[open] {
+        opacity: 1;
+      }
+      
+      #modal {
+        @apply --shadow-elevation-2dp;
+        background-color: var(--rula-expandable-card-content-bg, #ffffff);
+        position: fixed;
+        display: none;
+        visibility: hidden;
+        flex-direction: column;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      #modal[open] {
+        @apply --shadow-elevation-8dp;
+      }
+
+      #modal[visible] {
+        visibility: visible;
+        display: flex;
+      }
+
+      #modal[raised] {
+        z-index: 1000;
+      }
+
+      #modal[transition] {
+        transition-property: left, width, top, height, box-shadow;
+        transition-delay: 0s, 0s, 0.06s, 0.06s, 0s;
+        transition-duration: 0.28s;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      #modalHeader {
+        align-items: flex-end;
+        background-color: var(--rula-expandable-card-bg-color, #002d72);
+        border-radius: 2px;
+        color: var(--rula-expandable-card-text-color, #ffffff);
+        cursor: pointer;
+        display: flex;
+        font-size: 24px;
+        justify-content: flex-start;
+        padding: 16px;
+        box-sizing: border-box;
+      }
+
+      #modalContent {
+        height: 100%;
+        opacity: 0;
+        transition-duration: 0.2s;
+        transition-delay: 0.1s;
+        transition-property: opacity;
+        box-sizing: border-box;
+        font-size: 18px;
+        padding: 24px;
+      }
+    </style>
+    <div id="scrim"></div>
+    <div id="wrapper">
+      <div id="header">
+        <slot name="header">
+          A placeholder title... Override this using slots!
+        </slot>
+      </div>
+    </div>
+    <div id="modal">
+      <div id="modalHeader">
+        A placeholder title... Override this using slots!
+      </div>
+      <div id="modalContent">
+        <slot name="content">
+          Some boilerplate content, provide better content with slots!
+        </slot>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * `rula-expandable-card`
+     * An element that can go between a closed and open state with a morph inbetween.
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class RulaExpandableCard extends Polymer.Element {
+      static get is() { return 'rula-expandable-card'; }
+      static get properties() {
+        return {
+          open: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        this.$.header.addEventListener('click', (e) => this._open(e));
+        this.$.modal.addEventListener('click', (e) => this._close(e));
+
+        this.$.modal.addEventListener('transitionend',
+            (e) => this._onTransitionEnd(e));
+
+        this.$.scrim.setAttribute('hidden', '');
+
+        const nodes = this.$.header.firstElementChild.assignedNodes({ flat: true });
+
+        if (nodes.length > 0) {
+          const clone = nodes[0].cloneNode(true);
+          // Remove the dummy content
+          this.$.modalHeader.removeChild(this.$.modalHeader.firstChild);
+          this.$.modalHeader.appendChild(clone);
+        }
+      };
+
+      _open(e) {
+        this.open = true;
+
+        const b = this.$.wrapper.getBoundingClientRect();
+        const m = this.$.modal;
+
+        m.style.top = b.y + 'px';
+        m.style.left = b.x + 'px';
+        m.style.width = b.width + 'px';
+        m.style.height = b.height + 'px';
+        m.setAttribute('raised', '');
+        m.setAttribute('visible', '');
+        this.$.scrim.removeAttribute('hidden');
+
+        this.$.modalContent.style.opacity = 0;
+
+        const mh = this.$.modalHeader;
+        mh.style.height = b.height + 'px';
+        mh.style.minHeight = b.height + 'px';
+
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          m.setAttribute('transition', '');
+          m.setAttribute('open', '');
+          this.$.scrim.setAttribute('open', '');
+
+          m.style.top = '10%';
+          m.style.left = '10%';
+          m.style.width = '80%';
+          m.style.height = '80%';
+
+          this.$.modalContent.style.opacity = 1;
+        });
+      };
+
+      _close(e) {
+        this.open = false;
+
+        const b = this.$.wrapper.getBoundingClientRect();
+        const m = this.$.modal;
+
+        m.style.top = b.y + 'px';
+        m.style.left = b.x + 'px';
+        m.style.width = b.width + 'px';
+        m.style.height = b.height + 'px';
+
+        this.$.modalContent.style.opacity = 0;
+
+        this.$.scrim.removeAttribute('open');
+        m.removeAttribute('open');
+      };
+
+      _onTransitionEnd(e) {
+        const m = this.$.modal;
+
+        if (!this.open && e.propertyName === 'height') {
+          m.removeAttribute('raised');
+          m.removeAttribute('transition');
+          m.removeAttribute('visible');
+          this.$.scrim.setAttribute('hidden', '');
+        }
+      };
+    }
+
+    window.customElements.define(RulaExpandableCard.is, RulaExpandableCard);
+  </script>
+</dom-module>

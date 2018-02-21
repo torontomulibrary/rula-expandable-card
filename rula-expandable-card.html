@@ -1,12 +1,51 @@
+<!--
+@license
+Copyright (c) 2018 Ryerson University Library & Archives. All rights reserved.
+
+This code may only be used under the BSD style license found at https://ryersonlibrary.github.io/webcomponents/LICENSE.txt
+-->
 <link rel="import" href="bower_components/polymer/polymer-element.html">
 
 <link rel="import" href="bower_components/paper-styles/shadow.html">
+
+<!--
+`rula-expandable-card` is an interactive container for content based on Material
+design [Cards](https://www.google.com/design/spec/components/cards.html)
+
+Example:
+
+  <rula-expandable-card>
+    <div slot="header">
+      How much wood can a woodchuck chuck if a woodchuck could chuck wood?
+    </div>
+    <div slot="content">
+      A woodchuck would chuck as much wood as a woodchuck could chuck if a woodchuck could chuck wood!
+    </div>
+  </rula-expandable-card>
+
+### Styling
+
+The following custom properties and mxing are available for styling:
+
+Custom propery | Description | Default
+---------------|-------------|----------
+`--rula-expandable-card-scrim` | Mixin applied to the scrim | `{}`
+`--rula-expandable-card-header` | Style mixin for the header section | `{}`
+`--rula-expandable-card-modal-bg` | Background colour of the expanded card | `#FFF`
+`--rula-expandable-card-modal-content` | Mixin applied to the content slot | `{}` 
+`--rula-expandable-card` | Mixin applied to `rula-expandable-card` | `{}`
+
+@group RULA WebComponents
+@rula-expandable-card
+@demo demo/index.html
+-->
 
 <dom-module id="rula-expandable-card">
   <template>
     <style>
       :host {
         display: block;
+        @apply --rula-expandable-card;
       }
 
       #wrapper {
@@ -49,6 +88,8 @@
         transition-duration: 200ms;
         transition-property: opacity;
         z-index: 999;
+
+        @apply --rula-expandable-card-scrim;
       }
 
       #scrim[hidden] {
@@ -61,7 +102,7 @@
       
       #modal {
         @apply --shadow-elevation-2dp;
-        background-color: var(--rula-expandable-card-content-bg, #ffffff);
+        background-color: var(--rula-expandable-card-modal-bg, #ffffff);
         position: fixed;
         display: none;
         visibility: hidden;

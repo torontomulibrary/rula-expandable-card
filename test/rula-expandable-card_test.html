@@ -45,9 +45,9 @@ This code may only be used under the BSD style license found at https://ryersonl
 		suite('Basic tests', () => {
 			test('Creating empty element works', () => {
 				const f = fixture('basic');
-			  const sRoot = f.shadowRoot;
-			  const slot = sRoot.querySelector('#header slot');
-				expect(slot.innerHTML.trim()).to.equal(
+				let node = f.$.header.firstElementChild;
+				expect(node.innerHTML.trim()).to.be.a('string');
+				expect(node.innerHTML.trim()).to.equal(
 					'A placeholder title... Override this using slots!'
 				);
 			});

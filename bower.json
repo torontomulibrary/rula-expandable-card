@@ -1,21 +1,31 @@
 {
-  "name": "rula-expandable-card",
-  "description": "A component based on a Material Design Card that maximizes on user interaction.",
-  "main": "rula-expandable-card.html",
-  "dependencies": {
-    "polymer": "Polymer/polymer#^2.0.0",
-    "paper-styles": "^2.1.0"
-  },
-  "devDependencies": {
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
-    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
-  },
-  "resolutions": {
-    "polymer": "^2.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/ryersonlibrary/rula-expandable-card.git"
-  }
+	"name": "rula-expandable-card",
+	"version": "1.0.0",
+	"authors": [
+		"Ryerson University Library & Archives"
+	],
+	"license": "https://ryersonlibrary.github.io/webcomponents/LICENSE.txt",
+	"description": "A component based on a Material Design Card that maximizes on user interaction.",
+	"main": "rula-expandable-card.html",
+	"demos": {
+		"Demos": "demo/index.html"
+	},
+	"dependencies": {
+		"polymer": "Polymer/polymer#^2.0.0",
+		"paper-styles": "^2.1.0"
+	},
+	"devDependencies": {
+		"iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+		"web-component-tester": "Polymer/web-component-tester#^6.0.0",
+		"webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+	},
+	"resolutions": {
+		"polymer": "^2.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/ryersonlibrary/rula-expandable-card.git"
+	},
+	"private": true,
+	"ignore": []
 }

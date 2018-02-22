@@ -1,4 +1,5 @@
-[![Build status](https://travis-ci.org)]
+[![Build status](https://travis-ci.org/ryersonlibrary/rula-expandable-card.svg?branch=master)](https://travis-ci.org/ryersonlibrary/rula-expandable-card)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)]
 
 ## &lt;rula-expandable-card&gt;
 
@@ -13,6 +14,17 @@ what is made visible when the card is expanded.
 
 The following code adds a simple expanding card with content in the header.
 
+<!---
+```
+<custom-element-demo>
+	<template>
+		<script src="../webcomponentsjs/webcomponents-lite.js"></script>
+		<link rel="import" href="rula-expandable-card.html">
+		<next-code-block></next-code-block>
+	</template>
+</custom-element-demo>
+```
+-->
 ```html
 <rula-expanable-card>
   <div slot="header">

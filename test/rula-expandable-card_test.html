@@ -17,42 +17,53 @@ This code may only be used under the BSD style license found at https://ryersonl
 	<script src="../bower_components/web-component-tester/browser.js"></script>
 
 	<link rel="import" href="../rula-expandable-card.html">
+
+	<style>
+		rula-expandable-card {
+			width: 300px;
+		}
+	</style>
 </head>
 
 <body>
-
-	<test-fixture id="BasicTestFixture">
+	<test-fixture id="basic">
 		<template>
 			<rula-expandable-card></rula-expandable-card>
 		</template>
 	</test-fixture>
 
-	<test-fixture id="ChangedPropertyTestFixture">
+	<test-fixture id="content">
 		<template>
-			<rula-expandable-card prop1="new-prop1"></rula-expandable-card>
+			<rula-expandable-card>
+				<div slot="header">Custom Header</div>
+				<div slot="content">Custom Content</div>
+			</rula-expandable-card>
 		</template>
 	</test-fixture>
 
 	<script>
-		suite('rula-expandable-card', () => {
+		suite('Basic tests', () => {
+			test('Creating empty element works', () => {
+				const f = fixture('basic');
+			  const sRoot = f.shadowRoot;
+			  const slot = sRoot.querySelector('#header slot');
+				expect(slot.innerHTML.trim()).to.equal(
+					'A placeholder title... Override this using slots!'
+				);
+			});
 
-			// test('instantiating the element with default properties works', () => {
-			//   const element = fixture('BasicTestFixture');
-			//   assert.equal(element.prop1, 'rula-expandable-card');
-			//   const elementShadowRoot = element.shadowRoot;
-			//   const elementHeader = elementShadowRoot.querySelector('h2');
-			//   assert.equal(elementHeader.innerHTML, 'Hello rula-expandable-card!');
-			// });
+			test('Creating element with slotted content works', () => {
+				const f = fixture('content');
+				let nodes = f.$.header.firstElementChild.assignedNodes();
+				expect(nodes).to.have.lengthOf(1);
+				let node = nodes[0];
+				expect(node.innerHTML.trim()).to.be.a('string');
+				expect(node.innerHTML.trim()).to.equal('Custom Header');
 
-			// test('setting a property on the element works', () => {
-			//   // Create a test fixture
-			//   const element = fixture('ChangedPropertyTestFixture');
-			//   assert.equal(element.prop1, 'new-prop1');
-			//   const elementShadowRoot = element.shadowRoot;
-			//   const elementHeader = elementShadowRoot.querySelector('h2');
-			//   assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
-			// });
-
+				node = f.$.modalHeader.firstElementChild;
+				expect(node.innerHTML.trim()).to.be.a('string');
+				expect(node.innerHTML.trim()).to.equal('Custom Header');
+			});
 		});
 	</script>
 

@@ -21,6 +21,45 @@ This code may only be used under the BSD style license included with this projec
 
 	<custom-style>
 		<style is="custom-style" include="demo-pages-shared-styles">
+			:root {
+				--rula-expandable-card-header-bg: #777;
+				--rula-expandable-card-header-text: #000;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			rula-expandable-card {
+				--rula-expandable-card: {
+					height: 200px;
+					width: 200px;
+					padding: 25px;
+					overflow: hidden;
+				}
+
+				--rula-expandable-card-body: {
+					align-items: flex-end;
+					background-color: var(--rula-expandable-card-header-bg, #002d72);
+					border-radius: 2px;
+					color: var(--rula-expandable-card-header-text, #ffffff);
+					cursor: pointer;
+					display: flex;
+					font-size: 24px;
+					justify-content: flex-start;
+					padding: 16px;
+				}
+			}
+
+			div[header] {
+				@apply --rula-expandable-card-body;
+				border-radius: 0;
+			}
+
+			div[content] {
+				font-size: 18px;
+				padding: 24px;
+			}
 		</style>
 	</custom-style>
 </head>
@@ -30,31 +69,29 @@ This code may only be used under the BSD style license included with this projec
 		<h3>Vanilla component</h3>
 		<demo-snippet>
 			<template>
-				<rula-expandable-card></rula-expandable-card>
-			</template>
-		</demo-snippet>
-		<h3>Basic Header and Body content rula-expandable-card demo</h3>
-		<demo-snippet>
-			<template>
 				<rula-expandable-card>
-					<div slot="header">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" style="position: absolute; top: 24px; right: 0; width: 400px; fill: #003c82;">
-							<path d="M 0,94.7 0,0.2018 50,0.2018 50,14.7 20,14.7 20,38.7 48,38.7 48,53.7 20,53.7 20,94.7 Z
-                               M 93,18.45 83,58.45 102,58.45 Z M 55,94.45 81,0.4509 107,0.4509 132,94.45 112,94.45 106,73.45 80,73.45 74,94.45 Z
-                               M 170.2,81.65 Q 174.4,81.65 176.9,79.75 179.4,77.65 180.7,73.65 182,69.45 182.3,63.05 182.7,56.65 182.7,47.85 182.7,38.85
-                              182.3,32.35 182,25.65 180.7,21.55 179.4,17.35 176.9,15.35 174.4,13.35 170.2,13.35 166.1,13.35 163.6,15.35 161.1,17.35 159.8,21.55
-                              158.5,25.65 158.1,32.35 157.7,38.85 157.7,47.85 157.7,56.65 158.1,63.05 158.5,69.45 159.8,73.65 161.1,77.65 163.6,79.75 166.1,81.65
-                              170.2,81.65 Z M 209.6,94.65 181.8,94.65 Q 180.5,94.65 179.1,94.65 177.7,94.65 176.2,95.65 174.8,95.65 173.4,95.65 171.9,95.65
-                              170.5,95.65 159.6,95.65 153,92.65 146.7,89.65 143.3,84.15 139.9,78.15 138.8,69.15 137.8,60.05 137.8,47.85 137.8,38.45 138.3,29.75
-                              138.8,20.95 141.8,14.25 144.8,7.449 151.5,3.449 158.1,-0.7508 170.2,-0.7508 182.3,-0.7508 189,3.449 195.6,7.449 198.6,14.25
-                              201.6,20.95 202.1,29.75 202.7,38.45 202.7,47.85 202.7,55.35 201.9,60.95 201.2,66.55 199.8,70.75 198.5,74.95 196.3,77.95 194.1,80.95
-                              191.2,83.35 L 191.5,83.65 Q 192.5,83.35 193.9,82.85 195.4,82.25 196.7,81.65 198.1,81.15 199.3,80.75 200.6,80.35 201.4,80.35
-                              L 209.6,80.35 209.6,94.65 Z"></path>
-						</svg>
-						How much wood can a woodchuck chuck if a woodchuck could chuck wood?
+					<div header>
+						Card 1 Header
 					</div>
-					<div slot="content">
-						A woodchuck would chuck as much wood as a woodchuck could chuck if a woodchuck could chuck wood!
+					<div content>
+						A woodchuck would chuck as much wood as a woodchuck could chuck if a woodchuck could
+						chuck wood!
+					</div>
+				</rula-expandable-card>
+				<rula-expandable-card>
+					<div header>
+						Card 2 Header
+					</div>
+					<div content>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis faucibus eros,
+						nec varius nibh. Proin finibus sed massa at auctor. Pellentesque ut lacinia
+						risus. Maecenas lacinia erat mi, sit amet malesuada massa lobortis in. Nulla
+						facilisi. Aliquam porta aliquet tortor, sit amet aliquam odio luctus quis.
+						Sed pellentesque dictum orci ut porta. Nam in ex non turpis rhoncus efficitur
+						nec ac ipsum. Nullam venenatis tortor nisi, ut molestie dui hendrerit in. Praesent
+						varius a purus at feugiat. Orci varius natoque penatibus et magnis dis parturient
+						montes, nascetur ridiculus mus. Duis a ullamcorper mi. Ut placerat tristique
+						euismod. Aenean sed justo nulla. Nam hendrerit sed ex a condimentum.
 					</div>
 				</rula-expandable-card>
 			</template>

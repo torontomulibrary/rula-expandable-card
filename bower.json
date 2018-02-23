@@ -1,10 +1,10 @@
 {
 	"name": "rula-expandable-card",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"authors": [
 		"Ryerson University Library & Archives"
 	],
-	"license": "https://ryersonlibrary.github.io/webcomponents/LICENSE.txt",
+	"license": "BSD-3-Clause",
 	"description": "A component based on a Material Design Card that maximizes on user interaction.",
 	"main": "rula-expandable-card.html",
 	"demos": {

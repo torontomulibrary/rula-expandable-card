@@ -20,18 +20,50 @@ The following code adds a simple expanding card with content in the header.
 	<template>
 		<script src="../webcomponentsjs/webcomponents-lite.js"></script>
 		<link rel="import" href="rula-expandable-card.html">
+		<style>
+			rula-expandable-card {
+				--rula-expandable-card: {
+					height: 200px;
+					width: 300px;
+					padding: 25px;
+					overflow: hidden;
+				}
+
+				--rula-expandable-card-body: {
+					align-items: flex-end;
+					background-color: var(--rula-expandable-card-header-bg, #002d72);
+					border-radius: 2px;
+					color: var(--rula-expandable-card-header-text, #ffffff);
+					cursor: pointer;
+					display: flex;
+					font-size: 24px;
+					justify-content: flex-start;
+					padding: 16px;
+				}
+			}
+
+			div[header] {
+				@apply --rula-expandable-card-body;
+				border-radius: 0;
+			}
+
+			div[content] {
+				font-size: 18px;
+				padding: 24px;
+			}
+		</style>
 		<next-code-block></next-code-block>
 	</template>
 </custom-element-demo>
 ```
 -->
 ```html
-<rula-expanable-card>
-  <div slot="header">
+<rula-expandable-card>
+  <div header>
     <h2>Here's a question</h2>
     <span>How much wood can a woodchuck chuck if a woodchuck chould chuck wood?</span>
   </div>
-  <div slot="content">
+  <div content>
     A woodchuck would chuck as much wood as a woodchuck could chuck if a woodchuck could chuck wood!
   </div>
 <rula-expandable-card>
@@ -49,8 +81,8 @@ The following custom properties and mxing are available for styling:
 
 Custom propery | Description | Default
 ---------------|-------------|----------
-`--rula-expandable-card-scrim` | Mixin applied to the scrim | `{}`
+`--rula-expandable-card-scrim` | Mixin applied to the background when the card is open | `{}`
 `--rula-expandable-card-header` | Style mixin for the header section | `{}`
 `--rula-expandable-card-modal-bg` | Background colour of the expanded card | `#FFF`
-`--rula-expandable-card-modal-content` | Mixin applied to the content slot | `{}` 
-`--rula-expandable-card` | Mixin applied to `rula-expandable-card` | `{}`
+`--rula-expandable-card-body` | Mixin applied to the body of the card when closed | `{}` 
+`--rula-expandable-card` | Mixin applied to the element | `{}`

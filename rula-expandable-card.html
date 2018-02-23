@@ -43,40 +43,33 @@ Custom propery | Description | Default
 <dom-module id="rula-expandable-card">
 	<template>
 		<style>
-			:host {
-				display: block;
-				@apply --rula-expandable-card;
-			}
+			* { box-sizing: border-box; }
 
-			#wrapper {
+			:host {
+				@apply --shadow-elevation-2dp;
+				display: inline-block;
 				padding-top: 70%;
 				position: relative;
 				width: 100%;
+				@apply --rula-expandable-card;
 			}
 
-			#header {
-				@apply --shadow-elevation-2dp;
-				align-items: flex-end;
-				background-color: #002d72;
-				border-radius: 2px;
+			:host([open]) {
+				box-shadow: none;
+			}
+
+			#body {
 				bottom: 0;
-				box-sizing: border-box;
-				color: #ffffff;
-				cursor: pointer;
-				display: flex;
-				font-size: 24px;
 				height: 100%;
-				justify-content: flex-start;
 				left: 0;
-				padding: 16px;
 				position: absolute;
 				right: 0;
 				top: 0;
 				width: 100%;
-				@apply --rula-expandable-card-header;
+				@apply --rula-expandable-card-body;
 			}
 
-			#header[open] {
+			#body[open] {
 				display: none;
 			}
 
@@ -105,8 +98,8 @@ Custom propery | Description | Default
 			}
 
 			#modal {
-				@apply --shadow-elevation-2dp;
 				background-color: var(--rula-expandable-card-modal-bg, #ffffff);
+				border-radius: 2px;
 				position: fixed;
 				display: none;
 				visibility: hidden;
@@ -122,9 +115,6 @@ Custom propery | Description | Default
 			#modal[visible] {
 				visibility: visible;
 				display: flex;
-			}
-
-			#modal[raised] {
 				z-index: 1000;
 			}
 
@@ -134,48 +124,11 @@ Custom propery | Description | Default
 				transition-duration: 0.28s;
 				transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 			}
-
-			#modalHeader {
-				align-items: flex-end;
-				background-color: var(--rula-expandable-card-bg-color, #002d72);
-				border-radius: 2px;
-				color: var(--rula-expandable-card-text-color, #ffffff);
-				cursor: pointer;
-				display: flex;
-				font-size: 24px;
-				justify-content: flex-start;
-				padding: 16px;
-				box-sizing: border-box;
-			}
-
-			#modalContent {
-				height: 100%;
-				opacity: 0;
-				transition-duration: 0.2s;
-				transition-delay: 0.1s;
-				transition-property: opacity;
-				box-sizing: border-box;
-				font-size: 18px;
-				padding: 24px;
-			}
 		</style>
 		<div id="scrim"></div>
-		<div id="wrapper">
-			<div id="header">
-				<slot name="header">
-					A placeholder title... Override this using slots!
-				</slot>
-			</div>
-		</div>
+		<div id="body"></div>
 		<div id="modal">
-			<div id="modalHeader">
-				A placeholder title... Override this using slots!
-			</div>
-			<div id="modalContent">
-				<slot name="content">
-					Some boilerplate content, provide better content with slots!
-				</slot>
-			</div>
+			<slot></slot>
 		</div>
 	</template>
 
@@ -189,60 +142,71 @@ Custom propery | Description | Default
 		 * @demo demo/index.html
 		 */
 		class RulaExpandableCard extends Polymer.Element {
-			static get is() {
-				return 'rula-expandable-card';
-			}
-			static get properties() {
-				return {
+			static get is() { return 'rula-expandable-card'; }
+			static get properties() { return {
 					open: {
 						type: Boolean,
 						value: false,
 						reflectToAttribute: true,
 					}
-				};
-			}
+			}};
 
 			ready() {
 				super.ready();
 
-				this.$.header.addEventListener('click', (e) => this._open(e));
+				// Add necessary event handlers
+				this.$.body.addEventListener('click', (e) => this._open(e));
 				this.$.modal.addEventListener('click', (e) => this._close(e));
-
 				this.$.modal.addEventListener('transitionend',
 					(e) => this._onTransitionEnd(e));
 
+				// Set initial attributes to hide the scrim.
 				this.$.scrim.setAttribute('hidden', '');
 
-				const nodes = this.$.header.firstElementChild.assignedNodes({
-					flat: true
-				});
+				// Copy the content of the header div into the card.  Remove the
+				// attribute to avoid duplicate styles.
+				const headerContent = this.querySelector('[header]');
+				const clone = headerContent.cloneNode(true);
+				clone.removeAttribute('header');
+				this.$.body.appendChild(clone);
 
-				if (nodes.length > 0) {
-					const clone = nodes[0].cloneNode(true);
-					// Remove the dummy content
-					this.$.modalHeader.removeChild(this.$.modalHeader.firstChild);
-					this.$.modalHeader.appendChild(clone);
-				}
+				// Add opacity transition to the content element.
+				const content = this.querySelector('[content]');
+				content.style.transitionDuration = '0.2s';
+				content.style.transitionDelay = '0.1s';
+				content.style.transitionProperty = 'opacity';
 			};
 
-			_open(e) {
+			/**
+			 * Opens the modal component of this expandable card.
+			 */
+			_open() {
 				this.open = true;
 
-				const b = this.$.wrapper.getBoundingClientRect();
+				// Get the current size of this element. The modal will be positioned
+				// on top of it and expanded from there. The modal element does not have
+				// CSS transition properties so this takes place instantly.
+				const b = this.getBoundingClientRect();
 				const m = this.$.modal;
 
 				m.style.top = b.y + 'px';
 				m.style.left = b.x + 'px';
 				m.style.width = b.width + 'px';
 				m.style.height = b.height + 'px';
-				m.setAttribute('raised', '');
+
+				// Set the modal and scrim to visible while hiding the card.  This also
+				// happens instantly.
 				m.setAttribute('visible', '');
-				this.$.header.setAttribute('open', '');
+				this.$.body.setAttribute('open', '');
 				this.$.scrim.removeAttribute('hidden');
 
-				this.$.modalContent.style.opacity = 0;
+				// Ensure the content of the modal is transparent, it will be faded in
+				// as part of expanding the modal.
+				const content = this.querySelector('[content]');
+				content.style.opacity = 0;
 
-				const mh = this.$.modalHeader;
+				
+				const mh = this.querySelector('[header]');
 				mh.style.height = b.height + 'px';
 				mh.style.minHeight = b.height + 'px';
 
@@ -256,14 +220,19 @@ Custom propery | Description | Default
 					m.style.width = '80%';
 					m.style.height = '80%';
 
-					this.$.modalContent.style.opacity = 1;
+					content.style.opacity = 1;
 				});
 			};
 
-			_close(e) {
+			/**
+			 * Closes the modal component of this expandable card.
+			 */
+			_close() {
 				this.open = false;
 
-				const b = this.$.wrapper.getBoundingClientRect();
+				// Get the bounding rectangle of this element, in case the size has
+				// changed for some reason between open and close.
+				const b = this.getBoundingClientRect();
 				const m = this.$.modal;
 
 				m.style.top = b.y + 'px';
@@ -271,20 +240,35 @@ Custom propery | Description | Default
 				m.style.width = b.width + 'px';
 				m.style.height = b.height + 'px';
 
-				this.$.modalContent.style.opacity = 0;
+				// 
+				const content = this.querySelector('[content]');
+				content.style.opacity = 0;
 
+				// Begin the close transition for the scrim and modal.
 				this.$.scrim.removeAttribute('open');
 				m.removeAttribute('open');
 			};
 
+			/**
+			 * Handles when a CSS transition finishes.
+			 *
+			 * @param {Event} e The triggering event.
+			 */
 			_onTransitionEnd(e) {
-				const m = this.$.modal;
-
 				if (!this.open && e.propertyName === 'height') {
-					m.removeAttribute('raised');
+					// Only concerned about when the height transition is finished. There
+					// are other transitions that finish earlier. The modal can be fully
+					// hidden until the last transition is done.
+					const m = this.$.modal;
+
+					// Now that the closing transitions have finished:
+					// - Hide the modal
+					// - Remove the modal transition properties
+					// - Hide the scrim
+					// - Show the card
 					m.removeAttribute('transition');
 					m.removeAttribute('visible');
-					this.$.header.removeAttribute('open');
+					this.$.body.removeAttribute('open');
 					this.$.scrim.setAttribute('hidden', '');
 				}
 			};

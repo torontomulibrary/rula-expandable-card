@@ -28,39 +28,18 @@ This code may only be used under the BSD style license included with this projec
 <body>
 	<test-fixture id="basic">
 		<template>
-			<rula-expandable-card></rula-expandable-card>
-		</template>
-	</test-fixture>
-
-	<test-fixture id="content">
-		<template>
 			<rula-expandable-card>
-				<div slot="header">Custom Header</div>
-				<div slot="content">Custom Content</div>
+				<div header>Custom Header</div>
+				<div content>Custom Content</div>
 			</rula-expandable-card>
 		</template>
 	</test-fixture>
 
 	<script>
 		suite('Basic tests', () => {
-			test('Creating empty element works', () => {
+			test('Copy header content into body works', () => {
 				const f = fixture('basic');
-				let node = f.$.header.firstElementChild;
-				expect(node.innerHTML.trim()).to.be.a('string');
-				expect(node.innerHTML.trim()).to.equal(
-					'A placeholder title... Override this using slots!'
-				);
-			});
-
-			test('Creating element with slotted content works', () => {
-				const f = fixture('content');
-				let nodes = f.$.header.firstElementChild.assignedNodes();
-				expect(nodes).to.have.lengthOf(1);
-				let node = nodes[0];
-				expect(node.innerHTML.trim()).to.be.a('string');
-				expect(node.innerHTML.trim()).to.equal('Custom Header');
-
-				node = f.$.modalHeader.firstElementChild;
+				let node = f.$.body.firstElementChild;
 				expect(node.innerHTML.trim()).to.be.a('string');
 				expect(node.innerHTML.trim()).to.equal('Custom Header');
 			});

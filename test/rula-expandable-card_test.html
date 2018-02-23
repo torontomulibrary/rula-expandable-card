@@ -8,43 +8,43 @@ This code may only be used under the BSD style license included with this projec
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-	<title>rula-expandable-card test</title>
+  <title>rula-expandable-card test</title>
 
-	<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
-	<script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
 
-	<link rel="import" href="../rula-expandable-card.html">
+  <link rel="import" href="../rula-expandable-card.html">
 
-	<style>
-		rula-expandable-card {
-			width: 300px;
-		}
-	</style>
+  <style>
+    rula-expandable-card {
+      width: 300px;
+    }
+  </style>
 </head>
 
 <body>
-	<test-fixture id="basic">
-		<template>
-			<rula-expandable-card>
-				<div header>Custom Header</div>
-				<div content>Custom Content</div>
-			</rula-expandable-card>
-		</template>
-	</test-fixture>
+  <test-fixture id="basic">
+    <template>
+      <rula-expandable-card>
+        <div main-content>Main content</div>
+        <div extra-content>Extra Content</div>
+      </rula-expandable-card>
+    </template>
+  </test-fixture>
 
-	<script>
-		suite('Basic tests', () => {
-			test('Copy header content into body works', () => {
-				const f = fixture('basic');
-				let node = f.$.body.firstElementChild;
-				expect(node.innerHTML.trim()).to.be.a('string');
-				expect(node.innerHTML.trim()).to.equal('Custom Header');
-			});
-		});
-	</script>
+  <script>
+    suite('Basic tests', () => {
+      test('Copy header content into body works', () => {
+        const f = fixture('basic');
+        let node = f.$.body.firstElementChild;
+        expect(node.innerHTML.trim()).to.be.a('string');
+        expect(node.innerHTML.trim()).to.equal('Main content');
+      });
+    });
+  </script>
 
 </body>
 

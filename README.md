@@ -3,71 +3,86 @@
 
 ## &lt;rula-expandable-card&gt;
 
-`rula-expandable-card` is a web component inspired by a Material Design Card.
-When the user interacts, the card grows to fill some or all of the screen along
-with showing additional content.  The switch between the 'closed' and 'open'
-states are nicely animated following Material guidelines.
+`rula-expandable-card` is an elements combining aspects of Material Design 
+[Cards](https://www.google.com/design/spec/components/cards.html) and
+[Dialogs](https://www.google.com/design/spec/components/dialogs.html).
+It displays static content in similar fashion to a Card, and when clicked by the
+user it expands to fill the screen like a modal dialog while showing additional
+content.
 
-An expandable card has two sections, the `header` and `content` slots.  Anything
-in the `header` will be visible when the card is closed while the `content` is
-what is made visible when the card is expanded.
-
-The following code adds a simple expanding card with content in the header.
+### Example
 
 <!---
 ```
 <custom-element-demo>
-	<template>
-		<script src="../webcomponentsjs/webcomponents-lite.js"></script>
-		<link rel="import" href="rula-expandable-card.html">
-		<style>
-			rula-expandable-card {
-				--rula-expandable-card: {
-					height: 200px;
-					width: 300px;
-					padding: 25px;
-					overflow: hidden;
-				}
+  <template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="rula-expandable-card.html">
+    <custom-style>
+      <style is="custom-style">
+        rula-expandable-card {
+          height: 200px;
+          width: 300px;
+          padding: 25px;
+          overflow: hidden;
 
-				--rula-expandable-card-body: {
-					align-items: flex-end;
-					background-color: var(--rula-expandable-card-header-bg, #002d72);
-					border-radius: 2px;
-					color: var(--rula-expandable-card-header-text, #ffffff);
-					cursor: pointer;
-					display: flex;
-					font-size: 24px;
-					justify-content: flex-start;
-					padding: 16px;
-				}
-			}
+          --rula-expandable-card-body: {
+            align-items: flex-end;
+            background-color: #002d72;
+            border-radius: 2px;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            font-size: 24px;
+            justify-content: flex-start;
+            padding: 16px;
+          }
+        }
 
-			div[header] {
-				@apply --rula-expandable-card-body;
-				border-radius: 0;
-			}
+        div[header] {
+          @apply --rula-expandable-card-body;
+          border-radius: 0;
+        }
 
-			div[content] {
-				font-size: 18px;
-				padding: 24px;
-			}
-		</style>
-		<next-code-block></next-code-block>
-	</template>
+        div[content] {
+          font-size: 18px;
+          padding: 24px;
+        }
+      </style>
+    </custom-style>
+    <next-code-block></next-code-block>
+  </template>
 </custom-element-demo>
 ```
 -->
 ```html
 <rula-expandable-card>
-  <div header>
+  <div main-content>
     <h2>Here's a question</h2>
     <span>How much wood can a woodchuck chuck if a woodchuck chould chuck wood?</span>
   </div>
-  <div content>
+  <div extra-content>
     A woodchuck would chuck as much wood as a woodchuck could chuck if a woodchuck could chuck wood!
   </div>
-<rula-expandable-card>
+</rula-expandable-card>
 ```
+
+### Structure 
+A `rula-expandable-card` has three main parts:
+
+```html
+<div id="scrim"></div>
+<div id="body"></div>
+<div id="modal">
+  <slot></slot>
+</div>
+```
+ - `scrim` is used to hide the rest of the page when the card is open.
+ - `body` displays everything in `[main-content]` and is what the user sees
+ when the card is closed.
+ - `modal` displays everything in both `[main-content]` and `[extra-content]`
+ and is what the user sees when the card is open.
+
 
 ## Install
 
@@ -82,7 +97,6 @@ The following custom properties and mxing are available for styling:
 Custom propery | Description | Default
 ---------------|-------------|----------
 `--rula-expandable-card-scrim` | Mixin applied to the background when the card is open | `{}`
-`--rula-expandable-card-header` | Style mixin for the header section | `{}`
-`--rula-expandable-card-modal-bg` | Background colour of the expanded card | `#FFF`
-`--rula-expandable-card-body` | Mixin applied to the body of the card when closed | `{}` 
+`--rula-expandable-card-body` | Mixin applied to the body of the card when closed | `{}`
+`--rula-expandable-card-modal` | Mixin applied to the modal container when open | `{}`
 `--rula-expandable-card` | Mixin applied to the element | `{}`

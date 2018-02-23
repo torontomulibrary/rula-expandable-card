@@ -5,35 +5,36 @@ Copyright (c) 2018 Ryerson University Library & Archives. All rights reserved.
 This code may only be used under the BSD style license included with this project.
 -->
 <link rel="import" href="../polymer/polymer-element.html">
-
 <link rel="import" href="../paper-styles/shadow.html">
 
 <!--
-`rula-expandable-card` is an interactive container for content based on Material
-design [Cards](https://www.google.com/design/spec/components/cards.html)
+`rula-expandable-card` is an elements combining aspects of Material Design
+[Cards](https://www.google.com/design/spec/components/cards.html)
+and [Dialogs](https://www.google.com/design/spec/components/dialogs.html).
+It displays static content in similar fashion to a Card, and when clicked by the
+user it expands to fill the screen like a modal dialog while showing additional content.
 
-Example:
-
+### Example
+```html
+<rula-expandable-card>
+  <div main-content>
+    <h2>Here's a question</h2>
+    <span>How much wood can a woodchuck chuck if a woodchuck chould chuck wood?</span>
+  </div>
+  <div extra-content>
+    A woodchuck would chuck as much wood as a woodchuck could chuck if a woodchuck could chuck wood!
+  </div>
   <rula-expandable-card>
-    <div slot="header">
-      How much wood can a woodchuck chuck if a woodchuck could chuck wood?
-    </div>
-    <div slot="content">
-      A woodchuck would chuck as much wood as a woodchuck could chuck if a woodchuck could chuck wood!
-    </div>
-  </rula-expandable-card>
+```
 
-### Styling
-
+## Styling
 The following custom properties and mxing are available for styling:
-
-Custom propery | Description | Default
+Custom propery | Description | Default 
 ---------------|-------------|----------
-`--rula-expandable-card-scrim` | Mixin applied to the scrim | `{}`
-`--rula-expandable-card-header` | Style mixin for the header section | `{}`
-`--rula-expandable-card-modal-bg` | Background colour of the expanded card | `#FFF`
-`--rula-expandable-card-modal-content` | Mixin applied to the content slot | `{}` 
-`--rula-expandable-card` | Mixin applied to `rula-expandable-card` | `{}`
+`--rula-expandable-card-scrim` | Mixin applied to the background when the card is open | `{}`
+`--rula-expandable-card-body` | Mixin applied to the body of the card when closed | `{}`
+`--rula-expandable-card-modal` | Mixin applied to the modal container when open | `{}`
+`--rula-expandable-card` | Mixin applied to the element | `{}`
 
 @group RULA WebComponents
 @rula-expandable-card
@@ -41,239 +42,248 @@ Custom propery | Description | Default
 -->
 
 <dom-module id="rula-expandable-card">
-	<template>
-		<style>
-			* { box-sizing: border-box; }
+  <template>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
 
-			:host {
-				@apply --shadow-elevation-2dp;
-				display: inline-block;
-				padding-top: 70%;
-				position: relative;
-				width: 100%;
-				@apply --rula-expandable-card;
-			}
+      :host {
+        @apply --shadow-elevation-2dp;
+        display: inline-block;
+        padding-top: 70%;
+        position: relative;
+        width: 100%;
+        @apply --rula-expandable-card;
+      }
 
-			:host([open]) {
-				box-shadow: none;
-			}
+      :host([open]) {
+        box-shadow: none;
+      }
 
-			#body {
-				bottom: 0;
-				height: 100%;
-				left: 0;
-				position: absolute;
-				right: 0;
-				top: 0;
-				width: 100%;
-				@apply --rula-expandable-card-body;
-			}
+      #body {
+        bottom: 0;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 100%;
+        @apply --rula-expandable-card-body;
+      }
 
-			#body[open] {
-				display: none;
-			}
+      #body[open] {
+        display: none;
+      }
 
-			#scrim {
-				background-color: rgba(0, 0, 0, 0.4);
-				bottom: 0;
-				left: 0;
-				opacity: 0;
-				position: fixed;
-				right: 0;
-				top: 0;
-				transform: translateZ(0);
-				transition-duration: 200ms;
-				transition-property: opacity;
-				z-index: 999;
+      #scrim {
+        background-color: rgba(0, 0, 0, 0.4);
+        bottom: 0;
+        left: 0;
+        opacity: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        transform: translateZ(0);
+        transition-duration: 200ms;
+        transition-property: opacity;
+        z-index: 999;
 
-				@apply --rula-expandable-card-scrim;
-			}
+        @apply --rula-expandable-card-scrim;
+      }
 
-			#scrim[hidden] {
-				visibility: hidden;
-			}
+      #scrim[hidden] {
+        visibility: hidden;
+      }
 
-			#scrim[open] {
-				opacity: 1;
-			}
+      #scrim[open] {
+        opacity: 1;
+      }
 
-			#modal {
-				background-color: var(--rula-expandable-card-modal-bg, #ffffff);
-				border-radius: 2px;
-				position: fixed;
-				display: none;
-				visibility: hidden;
-				flex-direction: column;
-				box-sizing: border-box;
-				overflow: hidden;
-			}
+      #modal {
+        background-color: #ffffff;
+        border-radius: 2px;
+        position: fixed;
+        display: none;
+        visibility: hidden;
+        flex-direction: column;
+        box-sizing: border-box;
+        overflow: hidden;
+        @apply --rula-expandable-card-modal;
+      }
 
-			#modal[open] {
-				@apply --shadow-elevation-8dp;
-			}
+      #modal[open] {
+        @apply --shadow-elevation-8dp;
+      }
 
-			#modal[visible] {
-				visibility: visible;
-				display: flex;
-				z-index: 1000;
-			}
+      #modal[visible] {
+        visibility: visible;
+        display: flex;
+        z-index: 1000;
+      }
 
-			#modal[transition] {
-				transition-property: left, width, top, height, box-shadow;
-				transition-delay: 0s, 0s, 0.06s, 0.06s, 0s;
-				transition-duration: 0.28s;
-				transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-			}
-		</style>
-		<div id="scrim"></div>
-		<div id="body"></div>
-		<div id="modal">
-			<slot></slot>
-		</div>
-	</template>
+      #modal[transition] {
+        transition-property: left, width, top, height, box-shadow;
+        transition-delay: 0s, 0s, 0.06s, 0.06s, 0s;
+        transition-duration: 0.28s;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    </style>
+    <div id="scrim"></div>
+    <div id="body"></div>
+    <div id="modal">
+      <slot></slot>
+    </div>
+  </template>
 
-	<script>
-		/**
-		 * `rula-expandable-card`
-		 * An element that can go between a closed and open state with a morph inbetween.
-		 *
-		 * @customElement
-		 * @polymer
-		 * @demo demo/index.html
-		 */
-		class RulaExpandableCard extends Polymer.Element {
-			static get is() { return 'rula-expandable-card'; }
-			static get properties() { return {
-					open: {
-						type: Boolean,
-						value: false,
-						reflectToAttribute: true,
-					}
-			}};
+  <script>
+    /**
+     * `rula-expandable-card`
+     * An element that can go between a closed and open state with a morph inbetween.
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class RulaExpandableCard extends Polymer.Element {
+      static get is() {
+        return 'rula-expandable-card';
+      }
+      static get properties() {
+        return {
+          open: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+          }
+        }
+      };
 
-			ready() {
-				super.ready();
+      ready() {
+        super.ready();
 
-				// Add necessary event handlers
-				this.$.body.addEventListener('click', (e) => this._open(e));
-				this.$.modal.addEventListener('click', (e) => this._close(e));
-				this.$.modal.addEventListener('transitionend',
-					(e) => this._onTransitionEnd(e));
+        // Add necessary event handlers
+        this.$.body.addEventListener('click', () => this._open());
+        this.$.modal.addEventListener('click', () => this._close());
+        this.$.scrim.addEventListener('click', () => this._close());
+        this.$.scrim.addEventListener('scroll', e => e.preventDefault());
+        this.$.modal.addEventListener('transitionend',
+          (e) => this._onTransitionEnd(e));
 
-				// Set initial attributes to hide the scrim.
-				this.$.scrim.setAttribute('hidden', '');
+        // Set initial attributes to hide the scrim.
+        this.$.scrim.setAttribute('hidden', '');
 
-				// Copy the content of the header div into the card.  Remove the
-				// attribute to avoid duplicate styles.
-				const headerContent = this.querySelector('[header]');
-				const clone = headerContent.cloneNode(true);
-				clone.removeAttribute('header');
-				this.$.body.appendChild(clone);
+        // Copy the content of the header div into the card.  Remove the
+        // attribute to avoid duplicate styles.
+        const headerContent = this.querySelector('[main-content]');
+        const clone = headerContent.cloneNode(true);
+        clone.removeAttribute('header');
+        this.$.body.appendChild(clone);
 
-				// Add opacity transition to the content element.
-				const content = this.querySelector('[content]');
-				content.style.transitionDuration = '0.2s';
-				content.style.transitionDelay = '0.1s';
-				content.style.transitionProperty = 'opacity';
-			};
+        // Add opacity transition to the content element.
+        const content = this.querySelector('[extra-content]');
+        content.style.transitionDuration = '0.2s';
+        content.style.transitionDelay = '0.1s';
+        content.style.transitionProperty = 'opacity';
+      };
 
-			/**
-			 * Opens the modal component of this expandable card.
-			 */
-			_open() {
-				this.open = true;
+      /**
+       * Opens the modal component of this expandable card.
+       */
+      _open() {
+        this.open = true;
 
-				// Get the current size of this element. The modal will be positioned
-				// on top of it and expanded from there. The modal element does not have
-				// CSS transition properties so this takes place instantly.
-				const b = this.getBoundingClientRect();
-				const m = this.$.modal;
+        // Get the current size of this element. The modal will be positioned
+        // on top of it and expanded from there. The modal element does not have
+        // CSS transition properties so this takes place instantly.
+        const b = this.getBoundingClientRect();
+        const m = this.$.modal;
 
-				m.style.top = b.y + 'px';
-				m.style.left = b.x + 'px';
-				m.style.width = b.width + 'px';
-				m.style.height = b.height + 'px';
+        m.style.top = b.y + 'px';
+        m.style.left = b.x + 'px';
+        m.style.width = b.width + 'px';
+        m.style.height = b.height + 'px';
 
-				// Set the modal and scrim to visible while hiding the card.  This also
-				// happens instantly.
-				m.setAttribute('visible', '');
-				this.$.body.setAttribute('open', '');
-				this.$.scrim.removeAttribute('hidden');
+        // Set the modal and scrim to visible while hiding the card.  This also
+        // happens instantly.
+        m.setAttribute('visible', '');
+        this.$.body.setAttribute('open', '');
+        this.$.scrim.removeAttribute('hidden');
 
-				// Ensure the content of the modal is transparent, it will be faded in
-				// as part of expanding the modal.
-				const content = this.querySelector('[content]');
-				content.style.opacity = 0;
+        // Ensure the content of the modal is transparent, it will be faded in
+        // as part of expanding the modal.
+        const content = this.querySelector('[extra-content]');
+        content.style.opacity = 0;
 
-				
-				const mh = this.querySelector('[header]');
-				mh.style.height = b.height + 'px';
-				mh.style.minHeight = b.height + 'px';
 
-				Polymer.RenderStatus.afterNextRender(this, () => {
-					m.setAttribute('transition', '');
-					m.setAttribute('open', '');
-					this.$.scrim.setAttribute('open', '');
+        const mh = this.querySelector('[main-content]');
+        mh.style.height = b.height + 'px';
+        mh.style.minHeight = b.height + 'px';
 
-					m.style.top = '10%';
-					m.style.left = '10%';
-					m.style.width = '80%';
-					m.style.height = '80%';
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          m.setAttribute('transition', '');
+          m.setAttribute('open', '');
+          this.$.scrim.setAttribute('open', '');
 
-					content.style.opacity = 1;
-				});
-			};
+          m.style.top = '10%';
+          m.style.left = '10%';
+          m.style.width = '80%';
+          m.style.height = '80%';
 
-			/**
-			 * Closes the modal component of this expandable card.
-			 */
-			_close() {
-				this.open = false;
+          content.style.opacity = 1;
+        });
+      };
 
-				// Get the bounding rectangle of this element, in case the size has
-				// changed for some reason between open and close.
-				const b = this.getBoundingClientRect();
-				const m = this.$.modal;
+      /**
+       * Closes the modal component of this expandable card.
+       */
+      _close() {
+        this.open = false;
 
-				m.style.top = b.y + 'px';
-				m.style.left = b.x + 'px';
-				m.style.width = b.width + 'px';
-				m.style.height = b.height + 'px';
+        // Get the bounding rectangle of this element, in case the size has
+        // changed for some reason between open and close.
+        const b = this.getBoundingClientRect();
+        const m = this.$.modal;
 
-				// 
-				const content = this.querySelector('[content]');
-				content.style.opacity = 0;
+        m.style.top = b.y + 'px';
+        m.style.left = b.x + 'px';
+        m.style.width = b.width + 'px';
+        m.style.height = b.height + 'px';
 
-				// Begin the close transition for the scrim and modal.
-				this.$.scrim.removeAttribute('open');
-				m.removeAttribute('open');
-			};
+        // 
+        const content = this.querySelector('[extra-content]');
+        content.style.opacity = 0;
 
-			/**
-			 * Handles when a CSS transition finishes.
-			 *
-			 * @param {Event} e The triggering event.
-			 */
-			_onTransitionEnd(e) {
-				if (!this.open && e.propertyName === 'height') {
-					// Only concerned about when the height transition is finished. There
-					// are other transitions that finish earlier. The modal can be fully
-					// hidden until the last transition is done.
-					const m = this.$.modal;
+        // Begin the close transition for the scrim and modal.
+        this.$.scrim.removeAttribute('open');
+        m.removeAttribute('open');
+      };
 
-					// Now that the closing transitions have finished:
-					// - Hide the modal
-					// - Remove the modal transition properties
-					// - Hide the scrim
-					// - Show the card
-					m.removeAttribute('transition');
-					m.removeAttribute('visible');
-					this.$.body.removeAttribute('open');
-					this.$.scrim.setAttribute('hidden', '');
-				}
-			};
-		}
+      /**
+       * Handles when a CSS transition finishes.
+       *
+       * @param {Event} e The triggering event.
+       */
+      _onTransitionEnd(e) {
+        if (!this.open && e.propertyName === 'height') {
+          // Only concerned about when the height transition is finished. There
+          // are other transitions that finish earlier. The modal can be fully
+          // hidden until the last transition is done.
+          const m = this.$.modal;
 
-		window.customElements.define(RulaExpandableCard.is, RulaExpandableCard);
-	</script>
+          // Now that the closing transitions have finished:
+          // - Hide the modal
+          // - Remove the modal transition properties
+          // - Hide the scrim
+          // - Show the card
+          m.removeAttribute('transition');
+          m.removeAttribute('visible');
+          this.$.body.removeAttribute('open');
+          this.$.scrim.setAttribute('hidden', '');
+        }
+      };
+    }
+
+    window.customElements.define(RulaExpandableCard.is, RulaExpandableCard);
+  </script>
 </dom-module>

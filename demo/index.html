@@ -8,95 +8,95 @@ This code may only be used under the BSD style license included with this projec
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-	<title>rula-expandable-card demo</title>
+  <title>rula-expandable-card demo</title>
 
-	<script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 
-	<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-	<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-	<link rel="import" href="../rula-expandable-card.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../rula-expandable-card.html">
 
-	<custom-style>
-		<style is="custom-style" include="demo-pages-shared-styles">
-			:root {
-				--rula-expandable-card-header-bg: #777;
-				--rula-expandable-card-header-text: #000;
-			}
+  <custom-style>
+    <style is="custom-style" include="demo-pages-shared-styles">
+      :root {
+        --rula-expandable-card-header-bg: #777;
+        --rula-expandable-card-header-text: #000;
+      }
 
-			* {
-				box-sizing: border-box;
-			}
+      * {
+        box-sizing: border-box;
+      }
 
-			rula-expandable-card {
-				--rula-expandable-card: {
-					height: 200px;
-					width: 200px;
-					padding: 25px;
-					overflow: hidden;
-				}
+      rula-expandable-card {
+        --rula-expandable-card: {
+          height: 200px;
+          width: 200px;
+          padding: 25px;
+          overflow: hidden;
+        }
 
-				--rula-expandable-card-body: {
-					align-items: flex-end;
-					background-color: var(--rula-expandable-card-header-bg, #002d72);
-					border-radius: 2px;
-					color: var(--rula-expandable-card-header-text, #ffffff);
-					cursor: pointer;
-					display: flex;
-					font-size: 24px;
-					justify-content: flex-start;
-					padding: 16px;
-				}
-			}
+        --rula-expandable-card-body: {
+          align-items: flex-end;
+          background-color: var(--rula-expandable-card-header-bg, #002d72);
+          border-radius: 2px;
+          color: var(--rula-expandable-card-header-text, #ffffff);
+          cursor: pointer;
+          display: flex;
+          font-size: 24px;
+          justify-content: flex-start;
+          padding: 16px;
+        }
+      }
 
-			div[header] {
-				@apply --rula-expandable-card-body;
-				border-radius: 0;
-			}
+      div[main-content] {
+        @apply --rula-expandable-card-body;
+        border-radius: 0;
+      }
 
-			div[content] {
-				font-size: 18px;
-				padding: 24px;
-			}
-		</style>
-	</custom-style>
+      div[extra-content] {
+        font-size: 18px;
+        padding: 24px;
+      }
+    </style>
+  </custom-style>
 </head>
 
 <body>
-	<div class="vertical-section-container centered">
-		<h3>Vanilla component</h3>
-		<demo-snippet>
-			<template>
-				<rula-expandable-card>
-					<div header>
-						Card 1 Header
-					</div>
-					<div content>
-						A woodchuck would chuck as much wood as a woodchuck could chuck if a woodchuck could
-						chuck wood!
-					</div>
-				</rula-expandable-card>
-				<rula-expandable-card>
-					<div header>
-						Card 2 Header
-					</div>
-					<div content>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis faucibus eros,
-						nec varius nibh. Proin finibus sed massa at auctor. Pellentesque ut lacinia
-						risus. Maecenas lacinia erat mi, sit amet malesuada massa lobortis in. Nulla
-						facilisi. Aliquam porta aliquet tortor, sit amet aliquam odio luctus quis.
-						Sed pellentesque dictum orci ut porta. Nam in ex non turpis rhoncus efficitur
-						nec ac ipsum. Nullam venenatis tortor nisi, ut molestie dui hendrerit in. Praesent
-						varius a purus at feugiat. Orci varius natoque penatibus et magnis dis parturient
-						montes, nascetur ridiculus mus. Duis a ullamcorper mi. Ut placerat tristique
-						euismod. Aenean sed justo nulla. Nam hendrerit sed ex a condimentum.
-					</div>
-				</rula-expandable-card>
-			</template>
-		</demo-snippet>
-	</div>
+  <div class="vertical-section-container centered">
+    <h3>Vanilla component</h3>
+    <demo-snippet>
+      <template>
+        <rula-expandable-card>
+          <div main-content>
+            Card 1 Header
+          </div>
+          <div extra-content>
+            A woodchuck would chuck as much wood as a woodchuck could chuck if a woodchuck could
+            chuck wood!
+          </div>
+        </rula-expandable-card>
+        <rula-expandable-card>
+          <div main-content>
+            Card 2 Header
+          </div>
+          <div extra-content>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis faucibus eros,
+            nec varius nibh. Proin finibus sed massa at auctor. Pellentesque ut lacinia
+            risus. Maecenas lacinia erat mi, sit amet malesuada massa lobortis in. Nulla
+            facilisi. Aliquam porta aliquet tortor, sit amet aliquam odio luctus quis.
+            Sed pellentesque dictum orci ut porta. Nam in ex non turpis rhoncus efficitur
+            nec ac ipsum. Nullam venenatis tortor nisi, ut molestie dui hendrerit in. Praesent
+            varius a purus at feugiat. Orci varius natoque penatibus et magnis dis parturient
+            montes, nascetur ridiculus mus. Duis a ullamcorper mi. Ut placerat tristique
+            euismod. Aenean sed justo nulla. Nam hendrerit sed ex a condimentum.
+          </div>
+        </rula-expandable-card>
+      </template>
+    </demo-snippet>
+  </div>
 </body>
 
 </html>

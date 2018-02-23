@@ -1,5 +1,5 @@
 [![Build status](https://travis-ci.org/ryersonlibrary/rula-expandable-card.svg?branch=master)](https://travis-ci.org/ryersonlibrary/rula-expandable-card)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)]
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/ryersonlibrary/rula-expandable-card)
 
 ## &lt;rula-expandable-card&gt;
 
@@ -36,7 +36,14 @@ The following code adds a simple expanding card with content in the header.
   </div>
 <rula-expandable-card>
 ```
-### Styling
+
+## Install
+
+```
+bower install --save rula-expandable-card
+```
+
+## Styling
 
 The following custom properties and mxing are available for styling:
 

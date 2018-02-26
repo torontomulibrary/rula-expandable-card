@@ -1,6 +1,6 @@
 {
   "name": "rula-expandable-card",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "authors": [
     "Ryerson University Library & Archives"
   ],
@@ -26,6 +26,5 @@
     "type": "git",
     "url": "git://github.com/ryersonlibrary/rula-expandable-card.git"
   },
-  "private": true,
   "ignore": []
 }
